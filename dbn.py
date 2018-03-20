@@ -1,6 +1,4 @@
 import numpy as np
-import matplotlib.pyplot as plt
-from sklearn.neural_network import BernoulliRBM
 from keras import Sequential
 from keras.layers import Dense
 from keras.optimizers import SGD
@@ -28,7 +26,6 @@ class DBN():
             verbose_nn=1,
             decay_rate=0):
 
-
             self.x_train = x_train
             self.y_train = y_train
             self.x_test = x_test
@@ -49,7 +46,7 @@ class DBN():
             self.bias_rbm = []
             self.test_rms = 0
             self.result = []
-
+            self.model = Sequential()
 
     def pretraining(self):
         input_layer = self.x_train
@@ -70,40 +67,33 @@ class DBN():
 
     def finetuning(self):
         print('Fine-tuning start.')
-        model = Sequential()
+
         for i in range(0, len(self.hidden_layer)):
             if i == 0:
-                model.add(Dense(self.hidden_layer[i],activation=self.activation_function_nn,
-                                input_dim=self.x_train.shape[1]))
+                self.model.add(Dense(self.hidden_layer[i], activation=self.activation_function_nn,
+                                     input_dim=self.x_train.shape[1]))
             elif i >= 1:
-                model.add(Dense(self.hidden_layer[i], activation=self.activation_function_nn))
-            else :
+                self.model.add(Dense(self.hidden_layer[i], activation=self.activation_function_nn))
+            else:
                 pass
-            layer = model.layers[i]
+            layer = self.model.layers[i]
             layer.set_weights([self.weight_rbm[i], self.bias_rbm[i]])
         if(self.y_train.ndim == 1):
-            model.add(Dense(1, activation=None, kernel_regularizer=regularizers.l2(0.01)))
+            self.model.add(Dense(1, activation=None, kernel_regularizer=regularizers.l2(0.01)))
         else :
-            model.add(Dense(self.y_train.shape[1], activation=None))
+            self.model.add(Dense(self.y_train.shape[1], activation=None))
 
         sgd = SGD(lr=self.learning_rate_nn, decay=self.decay_rate)
-        model.compile(loss='mse',
+        self.model.compile(loss='mse',
                       optimizer=sgd,
                       )
-        model.fit(self.x_train, self.y_train, batch_size=self.batch_size_nn,
-                  epochs=self.n_epochs_nn, verbose=self.verbose_nn)
+        self.model.fit(self.x_train, self.y_train, batch_size=self.batch_size_nn,
+                       epochs=self.n_epochs_nn, verbose=self.verbose_nn)
         print('Fine-tuning finish.')
-        self.test_rms = model.evaluate(self.x_test, self.y_test)
-        self.result = np.array(model.predict(self.x_test))
-        #plot_model(model, to_file='model.png')
+        self.test_rms = self.model.evaluate(self.x_test, self.y_test)
+        self.result = np.array(self.model.predict(self.x_test))
 
-    def draw_result(self):
-        plt.figure(figsize=(10,8), dpi=100)
-        plt.plot(self.y_test.flatten())
-        plt.plot(self.result.flatten())
-        plt.legend(['lowpass_real','lowpass_predict'], loc='upper right')
-        plt.xlabel('RMS = %f'%self.test_rms, fontsize=16)
-        plt.title('result', fontsize=16)
-        plt.show()
+    def predict(self, series):
+        return np.array(self.model.predict(series))
 
 
