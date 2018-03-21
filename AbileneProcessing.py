@@ -30,12 +30,12 @@ def AbileneProcess(inputfilename, outputloc, routernum, datatype):
             data_output.append(data_extract[i * 12 + j,:])
     data_output = np.reshape(data_output,(routernum * routernum,2016))
     path1 = outputloc
-    path2 = os.path.splitext(os.path.split(inputfilename)[1])[0];
+    path2 = os.path.splitext(os.path.split(inputfilename)[1])[0]
     path = path1 + '\\' + path2 + '_' + str(routernum * routernum) +\
            '_' + str(datatype) + '.npy'
     np.save(path, data_output)
     print('Process successfully!')
 
 if __name__ == "__main__":
-    AbileneProcess('E:\\北航\\研究生\\Abilene TM\\Abilene_xlsx\\20040529.xlsx', 'E:\\北航\\研究生\\Abilene TM\\Abilene_npy',
+    AbileneProcess('E:\\北航\\研究生\\Abilene TM\\Abilene_xlsx\\20040402.xlsx', 'E:\\北航\\研究生\\Abilene TM\\Abilene_npy',
                    routernum = 12, datatype = 2)

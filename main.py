@@ -37,9 +37,9 @@ def predict_with_dwt(dataset, testnum, featurenum):
                    verbose_rbm=1,
                    random_seed_rbm=500,
                    activation_function_nn='tanh',
-                   learning_rate_nn=0.01,
-                   batch_size_nn=200,
-                   n_epochs_nn=200,
+                   learning_rate_nn=0.005,
+                   batch_size_nn=150,
+                   n_epochs_nn=1500,
                    verbose_nn=1,
                    decay_rate=0)
     dbn1.pretraining()
@@ -93,9 +93,9 @@ def predict_without_dwt(dataset, testnum, featurenum):
                    verbose_rbm=1,
                    random_seed_rbm=500,
                    activation_function_nn='tanh',
-                   learning_rate_nn=0.01,
-                   batch_size_nn=200,
-                   n_epochs_nn=200,
+                   learning_rate_nn=0.005,
+                   batch_size_nn=150,
+                   n_epochs_nn=1500,
                    verbose_nn=1,
                    decay_rate=0)
     dbn1.pretraining()
@@ -224,7 +224,7 @@ def multioutput(dataset, testnum, featurenum, nstep):
                    x_test=x_test,
                    y_test=y_test,
                    hidden_layer=[250],
-                   learning_rate_rbm=0.0005,
+                   learning_rate_rbm=0.005,
                    batch_size_rbm=150,
                    n_epochs_rbm=200,
                    verbose_rbm=1,
@@ -244,11 +244,20 @@ def multioutput(dataset, testnum, featurenum, nstep):
 # main function section
 
 # import the test data
-dataset = data_import('E:\\北航\\研究生\\Abilene TM\\Abilene_npy\\20040301_144_2.npy', scale=1)
-dataset_dbn = dataset[0, :] / 1000
+dataset = data_import('E:\\北航\\研究生\\Abilene TM\\Abilene_npy\\20040501_144_2.npy', scale=1)
+#dataset2 = data_import('E:\\北航\\研究生\\Abilene TM\\Abilene_npy\\20040508_144_2.npy', scale=2)
+#dataset3 = data_import('E:\\北航\\研究生\\Abilene TM\\Abilene_npy\\20040515_144_2.npy', scale=1)
+#dataset4 = data_import('E:\\北航\\研究生\\Abilene TM\\Abilene_npy\\20040522_144_2.npy', scale=4)
+dataset_dbn = dataset[0, 0:1875] / 1000
+
+#dataset_dbn = np.hstack((dataset, dataset2))[0, 0:1800] / 500
+#plt.plot(dataset_dbn)
+#plt.show()
+
+
 
 # set some model parameters
-testnum = 100
+testnum = 50
 featurenum = 50
 dataset_test = dataset_dbn[len(dataset_dbn) - testnum:len(dataset_dbn)]
 
@@ -260,8 +269,21 @@ testnum = 50
 '''
 '''
 dataset_pred_dwt, mse_dwt = predict_with_dwt(dataset_dbn, testnum, featurenum)
+plt.show()
+'''
+
+
+
 
 '''
+Section 2
+test different resolution ratio model performance
+'''
+
+
+
+
+
 
 '''
 Section 3
@@ -290,24 +312,28 @@ step = 2
 testnum = 50
 '''
 
+'''
 
-#pred_direct = direct(dataset_dbn, testnum=testnum, featurenum=featurenum)
-#mse_direct = mean_squared_error(pred_direct, dataset_test)
+pred_direct = direct(dataset_dbn, testnum=testnum, featurenum=featurenum)
+mse_direct = mean_squared_error(pred_direct, dataset_test)
 print('Direct prediction finish.')
-#pred_recursive = recursive(dataset_dbn, testnum=testnum, featurenum=featurenum)
-#mse_recursive = mean_squared_error(pred_recursive, dataset_test)
+pred_recursive = recursive(dataset_dbn, testnum=testnum, featurenum=featurenum)
+mse_recursive = mean_squared_error(pred_recursive, dataset_test)
 print('Recursive prediction finish.')
 pred_multioutput = multioutput(dataset_dbn, testnum=testnum, featurenum=featurenum, nstep=2)
 mse_multioutput = mean_squared_error(pred_multioutput, dataset_test)
 print('Multioutput prediction finish.')
 plt.figure(figsize=(12, 9), dpi=100)
 plt.plot(dataset_test)
-#plt.plot(pred_direct)
-#plt.plot(pred_recursive)
+plt.plot(pred_direct)
+plt.plot(pred_recursive)
 plt.plot(pred_multioutput)
 plt.legend(['dataset_real', 'direct', 'recursive', 'multioutput'])
-#plt.xlabel('mse_direct : %f\nmse_recursive : %f\nmse_multioutput : %f' % (mse_direct, mse_recursive, mse_multioutput))
-plt.xlabel('mse : %f'%mse_multioutput)
+plt.xlabel('mse_independent : %f\nmse_recursive : %f\nmse_multioutput : %f' % (mse_direct, mse_recursive, mse_multioutput))
 plt.title('Comparison on three multi-step prediction method')
 plt.show()
+
+'''
+
+
 
