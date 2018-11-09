@@ -37,5 +37,5 @@ def AbileneProcess(inputfilename, outputloc, routernum, datatype):
     print('Process successfully!')
 
 if __name__ == "__main__":
-    AbileneProcess('E:\\北航\\研究生\\Abilene TM\\Abilene_xlsx\\20040402.xlsx', 'E:\\北航\\研究生\\Abilene TM\\Abilene_npy',
+    AbileneProcess('./Abilene TM/Abilene_xlsx/20040402.xlsx', './Abilene TM/Abilene_npy',
                    routernum = 12, datatype = 2)

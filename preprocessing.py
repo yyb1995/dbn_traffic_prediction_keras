@@ -1,5 +1,5 @@
 '''
-Pre processing the network traffic data.
+Preprocessing the network traffic data.
 Input: 1*1008 data
 Output:train data and test data
 '''
