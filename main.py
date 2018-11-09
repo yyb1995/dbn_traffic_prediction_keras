@@ -9,7 +9,15 @@ import matplotlib.pyplot as plt
 
 
 def data_import(filepath, scale):
+    """
+    this function changes the resolution of original data to 1 / k by averaging k data.
+    :param filepath: data filepath. data_shape:(1, data_length)
+    :param scale: resolution parameter. for example: input data resolution is 1s,
+    scale=5, then output data resolution is 5s
+    :return: data_shape:(1, data_length // scale)
+    """
     dataset_5 = np.load(filepath)
+
     row, col = dataset_5.shape
     if scale == 1:
         return dataset_5
@@ -19,6 +27,13 @@ def data_import(filepath, scale):
 
 
 def predict_with_dwt(dataset, testnum, featurenum):
+    """
+    predict with DBN. Pre-process data with DWT
+    :param dataset: input dataset. data_shape:(data_length, )
+    :param testnum: number of points for test
+    :param featurenum: DBN input length
+    :return: prediction by DBN. data_shape:(testnum, )
+    """
     ca, cd = dwt.dwt(dataset)
     ca_matrix = ca[np.newaxis, :]
     print('DWT finish.')
