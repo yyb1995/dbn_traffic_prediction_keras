@@ -243,23 +243,11 @@ def multioutput(dataset, testnum, featurenum, nstep):
 
 # main function section
 
-# import the test data
-dataset = data_import('E:\\北航\\研究生\\Abilene TM\\Abilene_npy\\20040501_144_2.npy', scale=1)
-#dataset2 = data_import('E:\\北航\\研究生\\Abilene TM\\Abilene_npy\\20040508_144_2.npy', scale=2)
-#dataset3 = data_import('E:\\北航\\研究生\\Abilene TM\\Abilene_npy\\20040515_144_2.npy', scale=1)
-#dataset4 = data_import('E:\\北航\\研究生\\Abilene TM\\Abilene_npy\\20040522_144_2.npy', scale=4)
-dataset_dbn = dataset[0, 0:1875] / 1000
-
-#dataset_dbn = np.hstack((dataset, dataset2))[0, 0:1800] / 500
-#plt.plot(dataset_dbn)
-#plt.show()
-
-
-
-# set some model parameters
-testnum = 50
-featurenum = 50
-dataset_test = dataset_dbn[len(dataset_dbn) - testnum:len(dataset_dbn)]
+# import the test data, size = (data_length, )
+dataset = 2 * np.sin([i / 2000 * 10 * np.pi for i in range(2000)]) + 3
+testnum = 50  # testset length
+featurenum = 50  # input_length of the network
+dataset_test = dataset[len(dataset) - testnum:len(dataset)]
 
 
 '''
