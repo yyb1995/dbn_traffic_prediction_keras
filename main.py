@@ -265,15 +265,12 @@ featurenum = 50  # input_length of the network
 dataset_test = dataset[len(dataset) - testnum:len(dataset)]
 
 
-'''
-Section 1
-Simple implement of DBN-NN prediction model
+
+# Section 1: Simple implement of DBN-NN prediction model
 testnum = 50
-'''
-'''
-dataset_pred_dwt, mse_dwt = predict_with_dwt(dataset_dbn, testnum, featurenum)
+dataset_pred_dwt, mse_dwt = predict_with_dwt(dataset, testnum, featurenum)
 plt.show()
-'''
+
 
 
 
